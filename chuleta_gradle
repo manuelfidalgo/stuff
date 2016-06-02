@@ -1,0 +1,89 @@
+Gradle cheatsheet
+
+//print classpath
+ println classpath
+
+ classpath.each { c ->
+    	println c
+    }
+
+
+configurations.htmlunit.files.each { c ->
+		println c
+	}
+
+
+
+dependencia configuration
+compile project(path: ':api', configuration: 'spi')
+http://www.gradle.org/docs/current/userguide/multi_project_builds.html
+
+
+
+//copy configuration jars
+copy {
+      from configurations.config_name.copy().setTransitive(false)
+      into 'build/tmp/'
+   } 
+
+
+//no ejecutar tests en un proyecto
+test.onlyIf { 
+	//test are not executed in this project
+	!project.name.equals("MultiSpeakerSimpleConsole")
+}
+
+
+recorrer directorios recursivamente
+task list << {
+    // Create a file tree with a base directory
+File dir = new File('current/all_src')
+
+dir.eachFileRecurse { file ->
+if (file.isDirectory())
+  println file
+}
+
+}
+
+//todos los proyectos
+	Collection<Project> projects = subprojects.findAll {project -> project.name != 'kk_project'}
+
+source = projects*.sourceSets*.main*.java
+
+
+//afterTask
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (task.name == 'doPackage') {
+        packagingTest.execute();
+    }
+}
+
+
+
+//artifacts-jar
+task jarTest(type: Jar, dependsOn: testClasses) {
+       // group = "Archives"
+    description = 'Assembles a jar archive containing the test classes.'
+         classifier = 'tests'
+	from sourceSets.test.java
+}
+
+
+artifacts {
+        compile jar
+        testCompile jarTest
+}
+        
+tasks.assemble.dependsOn jarTest
+jar.group = "Archives"
+
+
+//recorrer classpath
+javadocAPI.doLast {
+  	println "javadoc classpath is:- "
+javadoc.classpath.getFiles().each { file ->
+println "file: \"" + file + "\""}
+  
+  
+  }
