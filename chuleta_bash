@@ -23,3 +23,5 @@ git_branch() {
 export PS1="\[\e[33m\]\u@\h:\W\[\e[1;32m\]\$(git_branch)\[\e[0m\] \[\e[34m\]$\[\e[0m\] "
 
 
+eliminar memoria compartida
+for i in `ipcs -m | grep SVN | awk '{print $2}' `; do echo $i; ipcrm -m $i; done
