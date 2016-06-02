@@ -1,0 +1,25 @@
+Chuleta bash
+
+replace in multiple
+find . -name "*.html" -print | xargs sed -i 's/apple/orange/g'
+
+num procesadores
+cat /proc/cpuinfo | grep processor | wc -l
+
+velocidad memoria
+dmidecode | grep Speed
+
+Ver funciones dll
+nm -D /lib/mylib.so.1
+otros: objdump, readelf.
+
+mount nfs 
+sudo mount -t nfs host:/remote_folder /local_folder
+
+show git branch
+git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+export PS1="\[\e[33m\]\u@\h:\W\[\e[1;32m\]\$(git_branch)\[\e[0m\] \[\e[34m\]$\[\e[0m\] "
+
+
